@@ -72,6 +72,7 @@
 
 - type: entity
   id: MobWatcherLavaland
+  suffix: Lavaland
   parent: MobWatcherBase
   components:
   - type: Sprite
@@ -89,6 +90,7 @@
 
 - type: entity
   id: MobWatcherIcewing
+  suffix: Lavaland
   parent: MobWatcherBase
   name: icewing watcher
   components:
@@ -107,6 +109,7 @@
 
 - type: entity
   id: MobWatcherMagmawing
+  suffix: Lavaland
   parent: MobWatcherBase
   name: magmawing watcher
   components:

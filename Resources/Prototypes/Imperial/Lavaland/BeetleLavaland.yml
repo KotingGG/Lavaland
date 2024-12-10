@@ -1,0 +1,264 @@
+- type: entity
+  name: Beetle
+  parent: SimpleSpaceMobBaseNoBloodstream
+  id: MobBeetleLavaland
+  suffix: Lavaland
+  description: Something creepy... I wouldn't even like to know how it reproduces...
+  components:
+  - type: HTN
+    rootTask:
+      task: BeetleLavalandCompound
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Imperial/Lavaland/beetle_and_eggs.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"] #, "movement"
+      state: beetle
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      state: beetle_glow
+      shader: unshaded
+#  - type: SpriteMovement
+#    movementLayers:
+#      movement:
+#        state: chicken-moving-0
+#    noMovementLayers:
+#      movement:
+#        state: beetle
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - BeetleLavaland
+    - VimPilot #
+  - type: Food
+  - type: Thirst
+    startingThirst: 25  # spawn with Okay thirst state
+    thresholds:
+      OverHydrated: 35
+      Okay: 25
+      Thirsty: 15
+      Parched: 10
+      Dead: 0
+    baseDecayRate: 0.001
+  - type: Hunger
+    currentHunger: 25   # spawn with Okay hunger state
+    thresholds:
+      Overfed: 35
+      Okay: 25
+      Peckish: 15
+      Starving: 10
+      Dead: 0
+    baseDecayRate: 0.10 # I'm very hungry! Give me. The cheese.
+  - type: Reproductive #
+    breedChance: 0.05
+    birthPopup: reproductive-laid-egg-popup
+    makeOffspringInfant: false
+    partnerWhitelist:
+      tags:
+      - BeetleLavaland
+    offspring:
+    - id: FoodEggBeetleFertilized
+      maxAmount: 2
+  - type: ReproductivePartner
+  - type: Appearance
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: beetle
+      Critical:
+        Base: beetle_dead
+      Dead:
+        Base: beetle_dead
+  - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    bloodMaxVolume: 30
+  - type: CombatMode
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      20: 0.7
+      25: 0.5
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      30: Critical
+      45: Dead  
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 2.5
+    baseSprintSpeed : 3
+  - type: EggLayer
+    eggSpawn:
+    - id: FoodEggBeetleFertilized
+#  - type: ReplacementAccent
+#    accent: chicken
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Piercing: 10
+  - type: SentienceTarget
+    flavorKind: station-event-random-sentience-flavor-organic
+  - type: NPCRetaliation
+    attackMemoryLength: 10
+  - type: NpcFactionMember
+    factions:
+    - RuminantHostileCompound #Passive
+  - type: MobPrice
+    price: 3000
+
+# egg
+
+- type: entity
+  name: BeetleEgg
+  id: FoodEggBeetleFertilized
+  parent: FoodEgg1
+  suffix: Lavaland
+  components:
+  - type: BadFood
+  - type: Sprite
+    sprite: Imperial/Lavaland/beetle_and_eggs.rsi
+    state: orange-red_egg
+  - type: Timer
+  - type: TimedSpawner
+    prototypes:
+    - MobBeetleLavaland
+    intervalSeconds: 350
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
+  - type: TimedDespawn #delete the egg after the chicken spawns
+    lifetime: 351
+  - type: PointLight 
+    radius: 1.15
+    energy: 1.3
+    castShadows: false
+    color: "#da8b8b"
+  - type: StaticPrice
+    price: 10000
+  
+- type: entity
+  parent: FoodEggBase1
+  id: FoodEgg1
+  abstract: true
+  name: egg
+  components:
+  - type: BadFood
+  - type: Sprite
+    layers:
+      - state: orange-red_egg
+        map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: Construction
+    graph: Egg
+    node: start
+  
+# Base egg
+
+- type: entity
+  parent: [FoodInjectableBase, ItemHeftyBase]
+  id: FoodEggBase1
+  description: An egg!
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+      - Egg
+      - Meat
+  - type: BadFood
+  - type: Food
+    trash: EgghellsBeetle
+  - type: Sprite
+    sprite: Objects/Consumable/Food/egg.rsi
+  - type: Item
+    sprite: Objects/Consumable/Food/egg.rsi
+    size: Tiny
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 6
+        reagents:
+        - ReagentId: Egg
+          Quantity: 6
+  - type: DrawableSolution
+    solution: food
+  - type: SolutionSpiker
+    sourceSolution: food
+    ignoreEmpty: true
+    popup: spike-solution-egg
+  # egg fragile
+  - type: DamageOnHighSpeedImpact
+    minimumSpeed: 0.1
+    damage:
+      types:
+        Blunt: 1
+  - type: Damageable
+    damageContainer: Biological
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: desecration
+      - !type:SpillBehavior
+        solution: food
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          Eggshells:
+            min: 1
+            max: 1
+          # Wow double-yolk you're so lucky!
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  # all below are for egg cooking/exploding
+  - type: AtmosExposed
+  - type: Temperature
+    currentTemperature: 290
+  - type: InternalTemperature
+    # ~1mm shell and ~1cm of albumen
+    thickness: 0.011
+    area: 0.04
+    # conductivity of egg shell based on a paper from Romanoff and Romanoff (1949)
+    conductivity: 0.456
+
+- type: entity
+  name: egghellsBeetle
+  parent: Eggshells
+  id: EgghellsBeetle
+  noSpawn: false
+  description: You're walkin' on 'em bud.
+  suffix: Lavaland
+  components:
+  - type: Sprite
+    sprite: Imperial/Lavaland/beetle_and_eggs.rsi
+    state: egghells   
+  - type: Food
+  - type: BadFood 
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 2
+        reagents:
+        - ReagentId: PoisonWine
+          Quantity: 1
+  - type: Tag
+    tags:
+    - Egg
+    - Trash

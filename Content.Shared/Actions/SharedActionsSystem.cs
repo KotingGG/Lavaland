@@ -838,7 +838,6 @@ public abstract class SharedActionsSystem : EntitySystem
     {
         // See client-side system for UI code.
     }
-
     #endregion
 
     #region EquipHandlers

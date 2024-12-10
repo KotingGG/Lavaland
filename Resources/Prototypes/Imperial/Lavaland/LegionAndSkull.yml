@@ -1,40 +1,8 @@
-# тело без крови
-- type: entity
-  abstract: true
-  parent:
-  - BaseSimpleMob
-  - MobCombat
-  - MobFlammable
-  id: SimpleSpaceMobBaseNoBloodstream 
-  suffix: AI
-  components:
-  - type: NpcFactionMember
-    factions:
-    - SimpleNeutral
-  - type: HTN
-    rootTask:
-      task: IdleCompound
-  - type: MeleeWeapon
-    angle: 0
-    animation: WeaponArcBite
-  - type: Body
-    prototype: Animal
-  - type: Climbing
-  - type: NameIdentifier
-    group: GenericNumber
-  - type: SlowOnDamage
-    speedModifierThresholds:
-      60: 0.7
-      80: 0.5
-  - type: MobPrice
-    price: 1000 # Living critters are valuable in space.
-  - type: Perishable
-
 # Легион
 - type: entity
   name: legion
   id: MobLegionBaseLavaland
-  parent: [ SimpleSpaceMobBaseNoBloodstream]
+  parent: SimpleSpaceMobBaseNoBloodstream
   abstract: true
   description: Run!..
   components:
@@ -55,6 +23,10 @@
       shader: unshaded
   - type: ZombieImmune
   - type: NoSlip
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
   - type: Fixtures
     fixtures:
       fix1:
@@ -80,6 +52,15 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.3
     baseSprintSpeed: 1.8
+  - type: Flammable #Fire damage has been removed, as there is a high probability of death in lava.
+    damage:
+      types: {}
+  - type: Temperature
+    heatDamageThreshold: 9999
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      100: 0.7
+      130: 0.5
   - type: BallisticAmmoProvider
     proto: MobSkullLavaland
     capacity: 5
@@ -109,13 +90,14 @@
 
 
 
-# Череп легиона
+# Legion Skull
 - type: entity
   name: skullLavalend
   id: BaseMobSkullLavaland
   parent: [ SimpleMobBase, FlyingMobBase, MobCombat]
   description: Skull? Chak-chak!
   abstract: true
+  suffix: Lavaland
   components:
     - type: Ammo
       muzzleFlash: null
@@ -131,7 +113,7 @@
         - SimpleHostile
     - type: Sprite
       drawdepth: Mobs
-      sprite: Imperial/Lavaland/skullbylegion.rsi
+      sprite: Imperial/Lavaland/skulllegion.rsi
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: base
@@ -190,7 +172,7 @@
 - type: entity
   parent: BaseMobSkullLavaland
   id: MobSkullLavaland
-  name: SkullByLegion
+  name: SkullLegion
   components:
   - type: Sprite
     layers:

@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: BaseItem
+  parent:  BaseItem
   id: OreBase
   description: A piece of unrefined ore.
   components:
@@ -36,11 +36,14 @@
         acts: [ "Destruction" ]
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: GoldOre
   name: gold ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
+#  - type: BadFood
   - type: Stack
     stackType: GoldOre
   - type: Sprite
@@ -50,10 +53,10 @@
     materialComposition:
       RawGold: 500
   - type: Extractable
-    grindableSolutionName: goldore
+    grindableSolutionName: food #goldore
   - type: SolutionContainerManager
     solutions:
-      goldore:
+      food: #goldore:
         reagents:
         - ReagentId: Gold
           Quantity: 10
@@ -67,8 +70,8 @@
     count: 1
 
 - type: entity
-  parent: OreBase
-  id: SteelOre
+  parent: OreBase 
+  id: SteelOre #edibility doesn't work
   name: iron ore
   suffix: Full
   components:
@@ -98,11 +101,14 @@
       count: 1
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: PlasmaOre
   name: plasma ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
+#  - type: BadFood
   - type: Stack
     stackType: PlasmaOre
   - type: Sprite
@@ -117,10 +123,10 @@
     castShadows: false
     color: "#e592e7"
   - type: Extractable
-    grindableSolutionName: plasmaore
+    grindableSolutionName: food #plasmaore
   - type: SolutionContainerManager
     solutions:
-      plasmaore:
+      food: #plasmaore:
         reagents:
         - ReagentId: Plasma
           Quantity: 10
@@ -134,11 +140,14 @@
       count: 1
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: SilverOre
   name: silver ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
+#  - type: BadFood
   - type: Stack
     stackType: SilverOre
   - type: Sprite
@@ -148,10 +157,10 @@
     materialComposition:
       RawSilver: 500
   - type: Extractable
-    grindableSolutionName: silverore
+    grindableSolutionName: food #silverore
   - type: SolutionContainerManager
     solutions:
-      silverore:
+      food: #silverore:
         reagents:
         - ReagentId: Silver
           Quantity: 10

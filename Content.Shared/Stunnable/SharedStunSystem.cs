@@ -45,6 +45,7 @@ public abstract class SharedStunSystem : EntitySystem
         SubscribeLocalEvent<StunnedComponent, ComponentStartup>(UpdateCanMove);
         SubscribeLocalEvent<StunnedComponent, ComponentShutdown>(UpdateCanMove);
 
+
         // helping people up if they're knocked down
         SubscribeLocalEvent<KnockedDownComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<SlowedDownComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovespeed);
@@ -62,44 +63,18 @@ public abstract class SharedStunSystem : EntitySystem
         SubscribeLocalEvent<StunnedComponent, PickupAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<StunnedComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<StunnedComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
-        SubscribeLocalEvent<MobStateComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
 
 
-    private void OnMobStateChanged(EntityUid uid, MobStateComponent component, MobStateChangedEvent args)
-    {
-        if (!TryComp<StatusEffectsComponent>(uid, out var status))
-        {
-            return;
-        }
-        switch (args.NewMobState)
-        {
-            case MobState.Alive:
-                {
-                    break;
-                }
-            case MobState.Critical:
-                {
-                    _statusEffect.TryRemoveStatusEffect(uid, "Stun");
-                    break;
-                }
-            case MobState.Dead:
-                {
-                    _statusEffect.TryRemoveStatusEffect(uid, "Stun");
-                    break;
-                }
-            case MobState.Invalid:
-            default:
-                return;
-        }
-
-    }
 
     private void UpdateCanMove(EntityUid uid, StunnedComponent component, EntityEventArgs args)
     {
         _blocker.UpdateCanMove(uid);
     }
+
+
+
 
     private void OnKnockInit(EntityUid uid, KnockedDownComponent component, ComponentInit args)
     {
@@ -133,6 +108,8 @@ public abstract class SharedStunSystem : EntitySystem
     {
         args.ModifySpeed(component.WalkSpeedModifier, component.SprintSpeedModifier);
     }
+
+
 
     // TODO STUN: Make events for different things. (Getting modifiers, attempt events, informative events...)
 
@@ -274,7 +251,6 @@ public abstract class SharedStunSystem : EntitySystem
         if (args.Unequipee == uid)
             args.Cancel();
     }
-
     #endregion
 }
 

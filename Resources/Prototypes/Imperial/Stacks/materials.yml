@@ -1,0 +1,6 @@
+- type: stack
+  id: GoliathHide
+  name: goliath hide
+  icon: { sprite: /Textures/Imperial/Lavaland/materials/goliath_hide.rsi, state: goliath_hide }
+  spawn: MaterialGoliathHide1
+  maxCount: 30
