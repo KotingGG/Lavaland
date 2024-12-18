@@ -15,7 +15,7 @@
   - type: Sprite
     drawdepth: Mobs
     sprite: Imperial/Lavaland/legion.rsi
-    layers:
+    layers: 
     - map: [ "enum.DamageStateVisualLayers.Base" ]
       state: base
     - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
@@ -159,7 +159,7 @@
       angle: 0
       animation: WeaponArcBite
       soundHit:
-        path: /Audio/Imperial/Lavaland/Fauna/attack-skull.ogg
+        path: /Audio/Effects/bite.ogg #/Audio/Imperial/Lavaland/Fauna/attack-skull.ogg
       damage:
         types:
           Piercing: 8

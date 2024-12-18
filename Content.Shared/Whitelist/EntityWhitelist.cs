@@ -96,5 +96,6 @@ namespace Content.Shared.Whitelist
 
             return false;
         }
+
     }
 }

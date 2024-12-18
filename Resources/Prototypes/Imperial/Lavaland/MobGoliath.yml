@@ -26,7 +26,7 @@
     - TemporaryBlindness
     - RadiationProtection
     - Drowsiness
-#  - type: IgnoreSpiderWeb
+  - type: IgnoreSpiderWeb
   - type: StandingState
   - type: Tag
     tags:
@@ -36,6 +36,7 @@
   id: MobGoliath
   parent: BaseMobAsteroid
   name: goliath
+  suffix: Lavaland
   description: A massive beast that uses long tentacles to ensnare its prey, threatening them is not advised under any conditions.
   components:
   - type: Sprite
@@ -85,20 +86,23 @@
       amount: 3
     - id: MaterialGoliathHide1
 
+
+
+
 # tentacle
 
 #- type: entity
 #  id: ActionGoliathTentacle
-#  name: Tentacle Slam
+#  name: "[color=red]Tentacle Slam[/color]"
 #  description: Use your tentacles to grab and stun a target player!
 #  components:
 #  - type: EntityWorldTargetAction
 #    raiseOnUser: true
 #    icon:
-#      sprite: Imperial/Lavaland/goliath.rsi
+#      sprite: Mobs/Aliens/Asteroid/goliath.rsi
 #      state: goliath_tentacle_spawn
 #    iconOn:
-#      sprite: Imperial/Lavaland/goliath.rsi
+#      sprite: Mobs/Aliens/Asteroid/goliath.rsi
 #      state: goliath_tentacle_wiggle
 #    sound:
 #      path: "/Audio/Weapons/slash.ogg"
@@ -106,50 +110,46 @@
 #    useDelay: 8
 #    range: 10
 
-
 - type: entity
   id: GoliathTentacle
-  name: tentacleKonec
+  name: tentacle1
+  suffix: Lavaland
   components:
+  - type: StunOnContact
+    ignoreWhitelist:
+      components:
+        - IgnoreSpiderWeb
   - type: Transform
     anchored: True
   - type: Physics
     bodyType: Static
-    canCollide: True
+    canCollide: true
   - type: InteractionOutline
   - type: Sprite
     sprite: Imperial/Lavaland/goliath.rsi
     layers:
     - state: goliath_tentacle_wiggle
-#  - type: Ammo
-#  - type: StaminaDamageOnCollide
-#    damage: 45
-#  - type: StunOnCollide
-#    stunAmount: 2
-#    knockdownAmount: 2
-#    ignoreWhitelist:
-#      components:
-#        - IgnoreSpiderWeb
   - type: Fixtures
     fixtures:
       fix:
         shape:
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
+        hard: false
         mask:
         - Impassable
         layer:
         - Impassable
-        hard: false
-  - type: TimedDespawn 
+  - type: TimedDespawn
     lifetime: 0.4
-  - type: SpawnOnDespawn
-    prototype: EffectGoliathTentacleRetract
+#  - type: SpawnOnDespawn
+#    prototype: EffectGoliathTentacleRetract
 
 - type: entity
   id: BaseEffectGoliathTentacleSpawn
   categories: [ HideSpawnMenu ]
-  name: tentacle1
+  name: tentacle2
+  suffix: Lavaland
   abstract: true
   components:
   - type: Transform
@@ -167,13 +167,15 @@
   id: EffectGoliathTentacleSpawn
   parent: BaseEffectGoliathTentacleSpawn
   categories: [ HideSpawnMenu ]
-  name: tentacleFull
+  name: tentacle3
+  suffix: Lavaland
   components:
     - type: Sprite
       state: goliath_tentacle_spawn
-    - type: SpawnOnDespawn
-      prototype: GoliathTentacle
-
+#    - type: SpawnOnDespawn
+#      prototype: GoliathTentacle
+    - type: TimedDespawn
+      lifetime: 0.725
 - type: entity
   id: EffectGoliathTentacleRetract
   parent: BaseEffectGoliathTentacleSpawn
@@ -183,4 +185,3 @@
     state: goliath_tentacle_retract
   - type: EffectVisuals
   - type: AnimationPlayer
-  - type: InteractionOutline
